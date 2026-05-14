@@ -44,24 +44,34 @@ async function parseEvent() {
         messages: [
           {
             role: "system",
-            content:
-              `You are a calendar assistant. Extract event details from the user's message and return ONLY a JSON object with these exact fields:
-- title (string)
-- date (string, YYYY-MM-DD)
-- startTime (string, HH:MM in 24h)
-- endTime (string, HH:MM in 24h)
-- location (string, can be a room name, address, or meeting URL — empty string if none)
-- recurrence (string, one of: none, daily, weekly, monthly, yearly)
-- notes (string, any extra context — empty string if none)
-
-Today is ${today}. If no end time is mentioned, add 1 hour to the start time. If no date is mentioned, use today.`,
+            content: `You are a calendar assistant. Extract event details from the user's message. Today is ${today}. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date.`,
           },
           {
             role: "user",
             content: text,
           },
         ],
-        response_format: { type: "json_object" },
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "calendar_event",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                title:      { type: "string", description: "Event title" },
+                date:       { type: "string", description: "Date in YYYY-MM-DD" },
+                startTime:  { type: "string", description: "Start time in HH:MM 24h" },
+                endTime:    { type: "string", description: "End time in HH:MM 24h" },
+                location:   { type: "string", description: "Room, address, or meeting URL. Empty string if none." },
+                recurrence: { type: "string", enum: ["none", "daily", "weekly", "monthly", "yearly"] },
+                notes:      { type: "string", description: "Any extra context. Empty string if none." },
+              },
+              required: ["title", "date", "startTime", "endTime", "location", "recurrence", "notes"],
+              additionalProperties: false,
+            },
+          },
+        },
       }),
     });
 
@@ -71,7 +81,7 @@ Today is ${today}. If no end time is mentioned, add 1 hour to the start time. If
     }
 
     const data = await res.json();
-    const event = JSON.parse(data.choices[0].message.content);
+    const event = JSON.parse(data.choices[0].message.content); // still a string even with structured outputs
 
     document.getElementById("r-title").value = event.title || "";
     document.getElementById("r-date").value = event.date || today;
