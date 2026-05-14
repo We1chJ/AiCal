@@ -1,80 +1,228 @@
-/* 
- * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
- * See LICENSE in the project root for license information.
- */
-
- html,
- body {
-     width: 100%;
-     height: 100%;
-     margin: 0;
-     padding: 0;
- }
- 
- ul {
-     margin: 0;
-     padding: 0;
- }
- 
- .ms-welcome__header {
-    padding: 20px;
-    padding-bottom: 30px;
-    padding-top: 100px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    align-items: center;
- }
-
- .ms-welcome__main {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    -webkit-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-flex: 1 0 0;
-    flex: 1 0 0;
-    padding: 10px 20px;
- }
- 
- .ms-welcome__main > h2 {
-     width: 100%;
-     text-align: center;
- }
- 
- .ms-welcome__features {
-     list-style-type: none;
-     margin-top: 20px;
- }
- 
- .ms-welcome__features.ms-List .ms-ListItem {
-     padding-bottom: 20px;
-     display: -webkit-flex;
-     display: flex;
- }
- 
- .ms-welcome__features.ms-List .ms-ListItem > .ms-Icon {
-     margin-right: 10px;
- }
- 
- .ms-welcome__action.ms-Button--hero {
-     margin-top: 30px;
- }
- 
-.ms-Button.ms-Button--hero .ms-Button-label {
-  color: #0078d7;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.ms-Button.ms-Button--hero:hover .ms-Button-label,
-.ms-Button.ms-Button--hero:focus .ms-Button-label{
-  color: #005a9e;
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #1f1f1f;
+  background: #fafafa;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+.header {
+  background: #0f6cbd;
+  color: white;
+  padding: 20px 16px 16px;
+  text-align: center;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+.header h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.header .subtitle {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+/* Body */
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  background: white;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #0f6cbd;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  background: white;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #0f6cbd;
+}
+
+/* Fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+}
+
+.field-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background: #0f6cbd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-b {
-    font-weight: bold;
+.btn-primary:hover {
+  background: #0d5ea8;
+}
+
+.btn-primary:disabled {
+  background: #a0c4e8;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  background: white;
+  color: #0f6cbd;
+  border: 1px solid #0f6cbd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #f0f7ff;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.action-row .btn-primary {
+  flex: 1;
+}
+
+/* API key section */
+.api-key-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 10px;
+  background: white;
+}
+
+.api-key-section summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  user-select: none;
+}
+
+.api-key-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.api-key-row input {
+  flex: 1;
+}
+
+.api-key-row .btn-secondary {
+  white-space: nowrap;
+}
+
+.key-status {
+  font-size: 11px;
+  color: #107c10;
+  margin-top: 4px;
+}
+
+/* Error */
+.error {
+  font-size: 12px;
+  color: #c50f1f;
+  min-height: 16px;
+}
+
+/* Loading spinner */
+.spinner-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #555;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #0f6cbd;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
