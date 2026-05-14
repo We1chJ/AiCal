@@ -1,0 +1,21 @@
+# IDE / editor
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Dev certs
+aical/.office-addin-dev-certs/
+
+# OS
+.DS_Store
+Thumbs.db
