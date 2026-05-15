@@ -31,56 +31,56 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
   };
 
   return (
-    <div className="screen">
-      <div className="compose-header">
-        <div className="compose-logo-row">
-          <LogoMark size={32} />
-          <span className="compose-app-name">AiCal</span>
-        </div>
-        <p className="compose-subtitle">Describe an event — AI will schedule it</p>
+    <div className="compose-screen">
+      {/* Logo lockup */}
+      <div className="compose-logo-row">
+        <LogoMark size={36} />
+        <span className="compose-app-name">AiCal</span>
+      </div>
+      <p className="compose-subtitle">Describe an event — AI will schedule it</p>
+
+      {/* Textarea */}
+      <div className="compose-textarea-wrap">
+        <textarea
+          className="compose-textarea"
+          value={text}
+          onChange={e => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="e.g. Team standup every Monday at 9am, 30 minutes in the Zoom room"
+        />
       </div>
 
-      <div className="compose-body">
-        <div className="compose-textarea-wrap">
-          <textarea
-            className="compose-textarea"
-            value={text}
-            onChange={e => setText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="e.g. Team standup every Monday at 9am, 30 minutes in the Zoom room"
-          />
-        </div>
+      {/* Parse button */}
+      <GlassButton fullWidth onClick={() => onParse(text.trim(), apiKey.trim())}>
+        Parse Event
+      </GlassButton>
 
-        <GlassButton fullWidth onClick={() => onParse(text.trim(), apiKey.trim())}>
-          Parse Event
-        </GlassButton>
+      {error && <div className="compose-error">{error}</div>}
 
-        {error && <div className="compose-error">{error}</div>}
-
-        <details className="api-accordion">
-          <summary>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
-              <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M7 6.5v3M7 4.5h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-            OpenAI API Key
-          </summary>
-          <div className="api-accordion-body">
-            <div className="api-input-row">
-              <input
-                type="password"
-                className="api-input"
-                value={apiKey}
-                onChange={e => setApiKey(e.target.value)}
-                placeholder="sk-..."
-                onKeyDown={e => e.key === 'Enter' && saveKey()}
-              />
-              <GlassButton variant="secondary" onClick={saveKey}>Save</GlassButton>
-            </div>
-            {keyStatus && <div className="api-status">{keyStatus}</div>}
+      {/* API key accordion */}
+      <details className="api-accordion">
+        <summary>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+            <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M7 6.5v3M7 4.5h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          OpenAI API Key
+        </summary>
+        <div className="api-accordion-body">
+          <div className="api-input-row">
+            <input
+              type="password"
+              className="api-input"
+              value={apiKey}
+              onChange={e => setApiKey(e.target.value)}
+              placeholder="sk-..."
+              onKeyDown={e => e.key === 'Enter' && saveKey()}
+            />
+            <GlassButton variant="secondary" onClick={saveKey}>Save</GlassButton>
           </div>
-        </details>
-      </div>
+          {keyStatus && <div className="api-status">{keyStatus}</div>}
+        </div>
+      </details>
     </div>
   );
 };
