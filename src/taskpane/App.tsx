@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import InputScreen from './components/InputScreen';
 import LoadingScreen from './components/LoadingScreen';
 import ReviewScreen from './components/ReviewScreen';
+import SuccessScreen from './components/SuccessScreen';
 import ClickSpark from './components/ClickSpark';
-import Iridescence from './components/Iridescence';
 
-type Screen = 'input' | 'loading' | 'review';
+type Screen = 'input' | 'loading' | 'review' | 'success';
 
 export interface EventData {
   title: string;
@@ -94,23 +94,27 @@ const App: React.FC = () => {
       location: event.location, body: event.notes,
       requiredAttendees: [], optionalAttendees: [],
     });
+
+    setScreen('success');
+  };
+
+  const handleReset = () => {
+    setParsedEvent(null);
+    setError('');
+    setScreen('input');
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
-        <Iridescence color={[0.2, 0.4, 1.0]} speed={0.6} amplitude={0.15} mouseReact={true} />
-      </div>
-      <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%' }}>
-        <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={20} sparkCount={8} duration={400}>
-          {screen === 'input' && <InputScreen onParse={handleParse} error={error} />}
-          {screen === 'loading' && <LoadingScreen />}
-          {screen === 'review' && parsedEvent && (
-            <ReviewScreen event={parsedEvent} onConfirm={handleSchedule} onBack={() => setScreen('input')} />
-          )}
-        </ClickSpark>
-      </div>
-    </div>
+    <ClickSpark sparkColor="hsl(252,75%,60%)" sparkSize={8} sparkRadius={18} sparkCount={6} duration={380}>
+      {screen === 'input' && <InputScreen onParse={handleParse} error={error} />}
+      {screen === 'loading' && <LoadingScreen />}
+      {screen === 'review' && parsedEvent && (
+        <ReviewScreen event={parsedEvent} onConfirm={handleSchedule} onBack={() => setScreen('input')} />
+      )}
+      {screen === 'success' && parsedEvent && (
+        <SuccessScreen event={parsedEvent} onReset={handleReset} />
+      )}
+    </ClickSpark>
   );
 };
 

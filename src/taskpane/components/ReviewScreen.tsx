@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { EventData } from '../App';
-import BorderGlow from './BorderGlow';
-import GlassSurface from './GlassSurface';
+import GlassButton from './GlassButton';
 
 interface Props {
   event: EventData;
@@ -27,27 +26,38 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
 
   return (
     <div className="screen">
-      <div className="header">
-        <h1>Review Event</h1>
-        <p className="subtitle">Edit if needed, then confirm</p>
+      {/* Topbar */}
+      <div className="review-topbar">
+        <button className="review-back-btn" onClick={onBack}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Back
+        </button>
+        <span className="review-topbar-title">Review Event</span>
+        <span className="review-topbar-spacer" />
       </div>
-      <div className="body">
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.08} saturation={1.2} className="glass-field-wrap">
-          <div className="field">
-            <label>Title</label>
-            <input type="text" value={data.title} onChange={update('title')} />
-          </div>
-        </GlassSurface>
 
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.08} saturation={1.2} className="glass-field-wrap">
-          <div className="field-row">
-            <div className="field">
-              <label>Date</label>
-              <input type="date" value={data.date} onChange={update('date')} />
+      {/* Scrollable fields */}
+      <div className="review-body">
+        {/* Title */}
+        <div className="review-card">
+          <div className="review-field">
+            <label className="review-label">Title</label>
+            <input className="review-input" type="text" value={data.title} onChange={update('title')} />
+          </div>
+        </div>
+
+        {/* Date + Recurrence */}
+        <div className="review-card">
+          <div className="review-grid">
+            <div className="review-field">
+              <label className="review-label">Date</label>
+              <input className="review-input" type="date" value={data.date} onChange={update('date')} />
             </div>
-            <div className="field">
-              <label>Recurrence</label>
-              <select value={data.recurrence} onChange={update('recurrence')}>
+            <div className="review-field">
+              <label className="review-label">Recurrence</label>
+              <select className="review-select" value={data.recurrence} onChange={update('recurrence')}>
                 <option value="none">None</option>
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
@@ -56,53 +66,49 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
               </select>
             </div>
           </div>
-        </GlassSurface>
-
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.08} saturation={1.2} className="glass-field-wrap">
-          <div className="field-row">
-            <div className="field">
-              <label>Start Time</label>
-              <input type="time" value={data.startTime} onChange={update('startTime')} />
-            </div>
-            <div className="field">
-              <label>End Time</label>
-              <input type="time" value={data.endTime} onChange={update('endTime')} />
-            </div>
-          </div>
-        </GlassSurface>
-
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.08} saturation={1.2} className="glass-field-wrap">
-          <div className="field">
-            <label>Location / Link</label>
-            <input type="text" value={data.location} onChange={update('location')} placeholder="Room, address, or meeting link" />
-          </div>
-        </GlassSurface>
-
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.08} saturation={1.2} className="glass-field-wrap">
-          <div className="field">
-            <label>Notes</label>
-            <textarea rows={3} value={data.notes} onChange={update('notes')} />
-          </div>
-        </GlassSurface>
-
-        {error && <div className="error">{error}</div>}
-
-        <div className="action-row">
-          <BorderGlow
-            borderRadius={8} backgroundColor="transparent" glowColor="217 60 60"
-            glowRadius={12} glowIntensity={1.5} coneSpread={30}
-            colors={['#60a5fa', '#818cf8', '#38bdf8']} className="btn-glow-wrap btn-glow-secondary"
-          >
-            <button className="btn-secondary" onClick={onBack}>Back</button>
-          </BorderGlow>
-          <BorderGlow
-            borderRadius={8} backgroundColor="transparent" glowColor="217 80 65"
-            glowRadius={12} glowIntensity={2.0} coneSpread={30}
-            colors={['#60a5fa', '#818cf8', '#38bdf8']} className="btn-glow-wrap btn-glow-primary"
-          >
-            <button className="btn-primary" onClick={handleConfirm}>Add to Calendar</button>
-          </BorderGlow>
         </div>
+
+        {/* Start + End Time */}
+        <div className="review-card">
+          <div className="review-grid">
+            <div className="review-field">
+              <label className="review-label">Start</label>
+              <input className="review-input" type="time" value={data.startTime} onChange={update('startTime')} />
+            </div>
+            <div className="review-field">
+              <label className="review-label">End</label>
+              <input className="review-input" type="time" value={data.endTime} onChange={update('endTime')} />
+            </div>
+          </div>
+        </div>
+
+        {/* Location */}
+        <div className="review-card">
+          <div className="review-field" style={{ borderBottom: 'none' }}>
+            <label className="review-label">Location / Link</label>
+            <input
+              className="review-input"
+              type="text"
+              value={data.location}
+              onChange={update('location')}
+              placeholder="Room, address, or meeting URL"
+            />
+          </div>
+        </div>
+
+        {/* Notes */}
+        <div className="review-card">
+          <div className="review-field" style={{ borderBottom: 'none' }}>
+            <label className="review-label">Notes</label>
+            <textarea className="review-textarea" rows={3} value={data.notes} onChange={update('notes')} />
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="review-footer">
+        {error && <div className="review-error">{error}</div>}
+        <GlassButton fullWidth onClick={handleConfirm}>Add to Calendar</GlassButton>
       </div>
     </div>
   );

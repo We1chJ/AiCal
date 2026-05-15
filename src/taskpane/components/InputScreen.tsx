@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import BorderGlow from './BorderGlow';
-import GlassSurface from './GlassSurface';
+import LogoMark from './LogoMark';
+import GlassButton from './GlassButton';
 
 interface Props {
   onParse: (text: string, apiKey: string) => void;
   error: string;
 }
+
+const SAMPLES = [
+  'Team standup Mon 9am, 30 min',
+  'Coffee with Sarah tomorrow 2pm',
+  'Doctor appointment Fri 10:30am',
+];
 
 const InputScreen: React.FC<Props> = ({ onParse, error }) => {
   const [text, setText] = useState('');
@@ -24,44 +30,70 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
     setTimeout(() => setKeyStatus(''), 2000);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      onParse(text.trim(), apiKey.trim());
+    }
+  };
+
   return (
     <div className="screen">
-      <div className="header">
-        <img src="../../assets/logo.png" className="logo" alt="AiCal" />
-        <h1>AiCal</h1>
-        <p className="subtitle">Describe an event and AI will schedule it</p>
+      <div className="compose-header">
+        <div className="compose-logo-row">
+          <LogoMark size={32} />
+          <span className="compose-app-name">AiCal</span>
+        </div>
+        <p className="compose-subtitle">Describe an event — AI will schedule it</p>
       </div>
-      <div className="body">
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.08} saturation={1.2} className="glass-field-wrap">
+
+      <div className="compose-body">
+        <div className="compose-textarea-wrap">
           <textarea
+            className="compose-textarea"
             value={text}
             onChange={e => setText(e.target.value)}
-            placeholder="e.g. Team standup every Monday at 9am in the conference room, 30 minutes"
+            onKeyDown={handleKeyDown}
+            placeholder="e.g. Team standup every Monday at 9am, 30 minutes in the Zoom room"
           />
-        </GlassSurface>
+        </div>
 
-        <BorderGlow
-          borderRadius={8} backgroundColor="transparent" glowColor="217 80 65"
-          glowRadius={12} glowIntensity={1.8} coneSpread={30}
-          colors={['#60a5fa', '#818cf8', '#38bdf8']} className="btn-glow-wrap"
-        >
-          <button className="btn-primary" onClick={() => onParse(text.trim(), apiKey.trim())}>
-            Parse Event
-          </button>
-        </BorderGlow>
+        <div className="sample-chips">
+          {SAMPLES.map(s => (
+            <button key={s} className="sample-chip" onClick={() => setText(s)}>
+              {s}
+            </button>
+          ))}
+        </div>
 
-        {error && <div className="error">{error}</div>}
+        <GlassButton fullWidth onClick={() => onParse(text.trim(), apiKey.trim())}>
+          Parse Event
+        </GlassButton>
 
-        <GlassSurface width="100%" height="auto" borderRadius={10} backgroundOpacity={0.06} saturation={1.1} className="glass-field-wrap">
-          <details className="api-key-section">
-            <summary>OpenAI API Key</summary>
-            <div className="api-key-row">
-              <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} placeholder="sk-..." />
-              <button className="btn-secondary" onClick={saveKey}>Save</button>
+        {error && <div className="compose-error">{error}</div>}
+
+        <details className="api-accordion">
+          <summary>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+              <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M7 6.5v3M7 4.5h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            OpenAI API Key
+          </summary>
+          <div className="api-accordion-body">
+            <div className="api-input-row">
+              <input
+                type="password"
+                className="api-input"
+                value={apiKey}
+                onChange={e => setApiKey(e.target.value)}
+                placeholder="sk-..."
+                onKeyDown={e => e.key === 'Enter' && saveKey()}
+              />
+              <GlassButton variant="secondary" onClick={saveKey}>Save</GlassButton>
             </div>
-            {keyStatus && <div className="key-status">{keyStatus}</div>}
-          </details>
-        </GlassSurface>
+            {keyStatus && <div className="api-status">{keyStatus}</div>}
+          </div>
+        </details>
       </div>
     </div>
   );

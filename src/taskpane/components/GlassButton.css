@@ -1,0 +1,89 @@
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  transition: opacity 0.15s, transform 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.glass-btn--primary {
+  background: linear-gradient(
+    155deg,
+    hsl(var(--accent-h), var(--accent-s), 63%) 0%,
+    hsl(var(--accent-h), var(--accent-s), 52%) 50%,
+    hsl(var(--accent-h), var(--accent-s), 44%) 100%
+  );
+  color: white;
+  box-shadow:
+    0 1px 0 hsla(var(--accent-h), 80%, 82%, 0.45) inset,
+    0 4px 16px hsla(var(--accent-h), var(--accent-s), 55%, 0.32);
+}
+
+.glass-btn--secondary {
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+}
+
+.glass-btn--ghost {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.glass-btn--full { width: 100%; }
+
+/* Sheen sweep */
+.glass-btn__sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.38) 50%,
+    transparent 62%
+  );
+  transform: translateX(-100%) skewX(-12deg);
+  pointer-events: none;
+}
+
+.glass-btn:hover .glass-btn__sheen {
+  animation: glass-sweep 0.55s ease forwards;
+}
+
+/* Inner top highlight */
+.glass-btn__highlight {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 0 0 3px 3px;
+  pointer-events: none;
+}
+
+.glass-btn__label {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-btn:hover { opacity: 0.9; }
+.glass-btn:active { transform: scale(0.98); }
+.glass-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+@keyframes glass-sweep {
+  0%   { transform: translateX(-100%) skewX(-12deg); }
+  100% { transform: translateX(260%)  skewX(-12deg); }
+}
