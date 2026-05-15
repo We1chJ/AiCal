@@ -33,6 +33,7 @@ async function parseEvent() {
 
   try {
     const today = new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -44,7 +45,7 @@ async function parseEvent() {
         messages: [
           {
             role: "system",
-            content: `You are a calendar assistant. Extract event details from the user's message. Today is ${today}. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date.`,
+            content: `You are a calendar assistant. Extract event details from the user's message. Today is ${today}. The user's local timezone is ${timezone}. All output times should be in the user's local timezone. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date.`,
           },
           {
             role: "user",
