@@ -18,23 +18,27 @@ module.exports = async (env, options) => {
     devtool: "source-map",
     entry: {
       polyfill: ["core-js/stable", "regenerator-runtime/runtime"],
-      taskpane: ["./src/taskpane/taskpane.js", "./src/taskpane/taskpane.html"],
+      taskpane: ["./src/taskpane/taskpane.tsx", "./src/taskpane/taskpane.html"],
       commands: "./src/commands/commands.js",
     },
     output: {
       clean: true,
     },
     resolve: {
-      extensions: [".html", ".js"],
+      extensions: [".tsx", ".ts", ".js", ".jsx", ".html"],
     },
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.(js|jsx|ts|tsx)$/,
           exclude: /node_modules/,
           use: {
             loader: "babel-loader",
           },
+        },
+        {
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"],
         },
         {
           test: /\.html$/,
