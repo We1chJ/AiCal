@@ -9,8 +9,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="aical"/>
   <Description DefaultValue="A template to get started."/>
-  <IconUrl DefaultValue="https://localhost:3000/assets/logo.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/logo.png"/>
+  <IconUrl DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
+  <HighResolutionIconUrl DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
   <SupportUrl DefaultValue="https://www.contoso.com/help"/>
   <AppDomains>
     <AppDomain>https://www.contoso.com</AppDomain>
@@ -26,7 +26,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+        <SourceLocation DefaultValue="https://we1chj.github.io/AiCal/taskpane.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -88,13 +88,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/logo.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/logo.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/logo.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html" />
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html" />
+        <bt:Url id="Commands.Url" DefaultValue="https://we1chj.github.io/AiCal/commands.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://we1chj.github.io/AiCal/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="aical"/>
