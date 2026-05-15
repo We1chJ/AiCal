@@ -7,12 +7,6 @@ interface Props {
   error: string;
 }
 
-const SAMPLES = [
-  'Team standup Mon 9am, 30 min',
-  'Coffee with Sarah tomorrow 2pm',
-  'Doctor appointment Fri 10:30am',
-];
-
 const InputScreen: React.FC<Props> = ({ onParse, error }) => {
   const [text, setText] = useState('');
   const [apiKey, setApiKey] = useState('');
@@ -55,14 +49,6 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
             onKeyDown={handleKeyDown}
             placeholder="e.g. Team standup every Monday at 9am, 30 minutes in the Zoom room"
           />
-        </div>
-
-        <div className="sample-chips">
-          {SAMPLES.map(s => (
-            <button key={s} className="sample-chip" onClick={() => setText(s)}>
-              {s}
-            </button>
-          ))}
         </div>
 
         <GlassButton fullWidth onClick={() => onParse(text.trim(), apiKey.trim())}>
