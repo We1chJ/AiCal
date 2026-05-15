@@ -6,9 +6,10 @@ interface Props {
   event: EventData;
   onConfirm: (event: EventData) => void;
   onBack: () => void;
+  error?: string;
 }
 
-const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
+const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack, error: scheduleError }) => {
   const [data, setData] = useState<EventData>(event);
   const [error, setError] = useState('');
 
@@ -107,7 +108,7 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
 
       {/* Sticky footer */}
       <div className="review-footer">
-        {error && <div className="review-error">{error}</div>}
+        {(error || scheduleError) && <div className="review-error">{error || scheduleError}</div>}
         <GlassButton fullWidth onClick={handleConfirm}>Add to Calendar</GlassButton>
       </div>
     </div>
