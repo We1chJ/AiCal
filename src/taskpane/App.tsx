@@ -3,6 +3,7 @@ import InputScreen from './components/InputScreen';
 import LoadingScreen from './components/LoadingScreen';
 import ReviewScreen from './components/ReviewScreen';
 import ClickSpark from './components/ClickSpark';
+import Iridescence from './components/Iridescence';
 
 type Screen = 'input' | 'loading' | 'review';
 
@@ -34,10 +35,7 @@ const App: React.FC = () => {
 
       const res = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
           messages: [
@@ -77,8 +75,7 @@ const App: React.FC = () => {
       }
 
       const data = await res.json();
-      const event: EventData = JSON.parse(data.choices[0].message.content);
-      setParsedEvent(event);
+      setParsedEvent(JSON.parse(data.choices[0].message.content));
       setScreen('review');
     } catch (e) {
       setError((e as Error).message);
@@ -93,24 +90,27 @@ const App: React.FC = () => {
       : new Date(start.getTime() + 60 * 60 * 1000);
 
     Office.context.mailbox.displayNewAppointmentForm({
-      subject: event.title,
-      start,
-      end,
-      location: event.location,
-      body: event.notes,
-      requiredAttendees: [],
-      optionalAttendees: [],
+      subject: event.title, start, end,
+      location: event.location, body: event.notes,
+      requiredAttendees: [], optionalAttendees: [],
     });
   };
 
   return (
-    <ClickSpark sparkColor="#0f6cbd" sparkSize={10} sparkRadius={20} sparkCount={8} duration={400}>
-      {screen === 'input' && <InputScreen onParse={handleParse} error={error} />}
-      {screen === 'loading' && <LoadingScreen />}
-      {screen === 'review' && parsedEvent && (
-        <ReviewScreen event={parsedEvent} onConfirm={handleSchedule} onBack={() => setScreen('input')} />
-      )}
-    </ClickSpark>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
+        <Iridescence color={[0.2, 0.4, 1.0]} speed={0.6} amplitude={0.15} mouseReact={true} />
+      </div>
+      <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%' }}>
+        <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={20} sparkCount={8} duration={400}>
+          {screen === 'input' && <InputScreen onParse={handleParse} error={error} />}
+          {screen === 'loading' && <LoadingScreen />}
+          {screen === 'review' && parsedEvent && (
+            <ReviewScreen event={parsedEvent} onConfirm={handleSchedule} onBack={() => setScreen('input')} />
+          )}
+        </ClickSpark>
+      </div>
+    </div>
   );
 };
 
