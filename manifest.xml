@@ -97,7 +97,7 @@
         <bt:Url id="Taskpane.Url" DefaultValue="https://we1chj.github.io/AiCal/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GroupLabel" DefaultValue="aical"/>
+        <bt:String id="GroupLabel" DefaultValue="AiCal"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Show Task Pane"/>
         <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
       </bt:ShortStrings>
