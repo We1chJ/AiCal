@@ -4,9 +4,8 @@ import LoadingScreen from './components/LoadingScreen';
 import ReviewScreen from './components/ReviewScreen';
 import SuccessScreen from './components/SuccessScreen';
 import ClickSpark from './components/ClickSpark';
-import { createGraphEvent } from './graph';
 
-type Screen = 'input' | 'loading' | 'review' | 'scheduling' | 'success';
+type Screen = 'input' | 'loading' | 'review' | 'success';
 
 export interface EventData {
   title: string;
@@ -22,7 +21,6 @@ const App: React.FC = () => {
   const [screen, setScreen] = useState<Screen>('input');
   const [parsedEvent, setParsedEvent] = useState<EventData | null>(null);
   const [error, setError] = useState('');
-  const [scheduleError, setScheduleError] = useState('');
 
   const handleParse = async (text: string, apiKey: string) => {
     setError('');
@@ -85,7 +83,7 @@ const App: React.FC = () => {
     }
   };
 
-  const downloadICS = (event: EventData) => {
+  const handleSchedule = (event: EventData) => {
     const start = new Date(`${event.date}T${event.startTime}`);
     const end = event.endTime
       ? new Date(`${event.date}T${event.endTime}`)
@@ -93,17 +91,26 @@ const App: React.FC = () => {
 
     const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
     const esc = (s: string) => s.replace(/[\\;,]/g, c => '\\' + c).replace(/\n/g, '\\n');
-    const rrule = event.recurrence !== 'none' ? `RRULE:FREQ=${event.recurrence.toUpperCase()}` : '';
+
+    const rrule = event.recurrence !== 'none'
+      ? `RRULE:FREQ=${event.recurrence.toUpperCase()}`
+      : '';
 
     const lines = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AiCal//AiCal//EN',
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//AiCal//AiCal//EN',
       'BEGIN:VEVENT',
-      `UID:${Date.now()}@aical`, `DTSTAMP:${fmt(new Date())}`,
-      `DTSTART:${fmt(start)}`, `DTEND:${fmt(end)}`,
+      `UID:${Date.now()}@aical`,
+      `DTSTAMP:${fmt(new Date())}`,
+      `DTSTART:${fmt(start)}`,
+      `DTEND:${fmt(end)}`,
       `SUMMARY:${esc(event.title)}`,
       event.location ? `LOCATION:${esc(event.location)}` : '',
       event.notes ? `DESCRIPTION:${esc(event.notes)}` : '',
-      rrule, 'END:VEVENT', 'END:VCALENDAR',
+      rrule,
+      'END:VEVENT',
+      'END:VCALENDAR',
     ].filter(Boolean).join('\r\n');
 
     const blob = new Blob([lines], { type: 'text/calendar;charset=utf-8' });
@@ -115,32 +122,7 @@ const App: React.FC = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
 
-  const handleSchedule = async (event: EventData) => {
-    setScheduleError('');
-    const clientId = localStorage.getItem('azure_client_id')?.trim();
-
-    if (clientId) {
-      setScreen('scheduling');
-      try {
-        await createGraphEvent(clientId, event);
-        setScreen('success');
-        return;
-      } catch (e) {
-        const code = (e as any).errorCode as string | undefined;
-        if (code === 'user_cancelled' || code === 'popup_window_error') {
-          setScheduleError(code === 'popup_window_error'
-            ? 'Sign-in popup was blocked. Allow popups for this site and try again.'
-            : 'Sign-in cancelled.');
-          setScreen('review');
-          return;
-        }
-        // Other Graph errors — fall back to ICS silently
-      }
-    }
-
-    downloadICS(event);
     setScreen('success');
   };
 
@@ -153,9 +135,9 @@ const App: React.FC = () => {
   return (
     <ClickSpark sparkColor="hsl(252,75%,60%)" sparkSize={8} sparkRadius={18} sparkCount={6} duration={380}>
       {screen === 'input' && <InputScreen onParse={handleParse} error={error} />}
-      {(screen === 'loading' || screen === 'scheduling') && <LoadingScreen />}
+      {screen === 'loading' && <LoadingScreen />}
       {screen === 'review' && parsedEvent && (
-        <ReviewScreen event={parsedEvent} onConfirm={handleSchedule} onBack={() => setScreen('input')} error={scheduleError} />
+        <ReviewScreen event={parsedEvent} onConfirm={handleSchedule} onBack={() => setScreen('input')} />
       )}
       {screen === 'success' && parsedEvent && (
         <SuccessScreen event={parsedEvent} onReset={handleReset} />
