@@ -7,7 +7,7 @@
   <Version>1.0.0.0</Version>
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="aical"/>
+  <DisplayName DefaultValue="AiCal"/>
   <Description DefaultValue="A template to get started."/>
   <IconUrl DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
   <HighResolutionIconUrl DefaultValue="https://we1chj.github.io/AiCal/assets/logo.png"/>
@@ -97,7 +97,7 @@
         <bt:Url id="Taskpane.Url" DefaultValue="https://we1chj.github.io/AiCal/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GroupLabel" DefaultValue="aical"/>
+        <bt:String id="GroupLabel" DefaultValue="AiCal"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Show Task Pane"/>
         <bt:String id="ActionButton.Label" DefaultValue="Perform an action"/>
       </bt:ShortStrings>
