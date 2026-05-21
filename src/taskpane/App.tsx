@@ -89,39 +89,15 @@ const App: React.FC = () => {
       ? new Date(`${event.date}T${event.endTime}`)
       : new Date(start.getTime() + 60 * 60 * 1000);
 
-    const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    const esc = (s: string) => s.replace(/[\\;,]/g, c => '\\' + c).replace(/\n/g, '\\n');
-
-    const rrule = event.recurrence !== 'none'
-      ? `RRULE:FREQ=${event.recurrence.toUpperCase()}`
-      : '';
-
-    const lines = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//AiCal//AiCal//EN',
-      'BEGIN:VEVENT',
-      `UID:${Date.now()}@aical`,
-      `DTSTAMP:${fmt(new Date())}`,
-      `DTSTART:${fmt(start)}`,
-      `DTEND:${fmt(end)}`,
-      `SUMMARY:${esc(event.title)}`,
-      event.location ? `LOCATION:${esc(event.location)}` : '',
-      event.notes ? `DESCRIPTION:${esc(event.notes)}` : '',
-      rrule,
-      'END:VEVENT',
-      'END:VCALENDAR',
-    ].filter(Boolean).join('\r\n');
-
-    const blob = new Blob([lines], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${event.title.replace(/[^a-z0-9]/gi, '_')}.ics`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    Office.context.mailbox.displayNewAppointmentForm({
+      subject: event.title,
+      start,
+      end,
+      location: event.location,
+      body: event.notes,
+      requiredAttendees: [],
+      optionalAttendees: [],
+    });
 
     setScreen('success');
   };

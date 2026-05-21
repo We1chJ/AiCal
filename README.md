@@ -16,7 +16,7 @@
 2. Click it to open the side panel
 3. Type or paste in your event text — *"Team standup every Monday at 9am for 30 minutes"*
 4. GPT-4o parses the details and shows a pre-filled review form you can edit
-5. Click **Add to Calendar** to save the event
+5. Click **Add to Calendar** — Outlook's appointment form opens pre-filled, click Save to add it
 
 Supports titles, dates, start/end times, location, notes, and recurring events (daily / weekly / monthly / yearly).
 
