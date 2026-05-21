@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://we1chj.github.io/AiCal/assets/logo.png" width="80" alt="AiCal logo" />
+  <img src="assets/logo.png" width="80" alt="AiCal logo" />
 </p>
 
 <h1 align="center">AiCal</h1>
@@ -10,13 +10,23 @@
 
 ---
 
+## Preview
+
+<p align="center">
+  <img src="assets/image.png" alt="AiCal button in the Outlook ribbon" width="340" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="assets/sidebar.png" alt="AiCal task pane" width="200" />
+</p>
+
+---
+
 ## How it works
 
-1. Open any email in Outlook and click **AiCal** in the ribbon
-2. Describe your event in plain English — *"Team standup every Monday at 9am for 30 minutes"*
-3. GPT-4o parses the details and shows a pre-filled review form
-4. Click **Add to Calendar** — an `.ics` file downloads instantly
-5. Double-click the file and Outlook adds the event
+1. Open any email in Outlook — the **AiCal** button appears in the ribbon
+2. Click it to open the side panel
+3. Describe your event in plain English — *"Team standup every Monday at 9am for 30 minutes"*
+4. GPT-4o parses the details and shows a pre-filled review form you can edit
+5. Click **Add to Calendar** to save the event
 
 Supports titles, dates, start/end times, location, notes, and recurring events (daily / weekly / monthly / yearly).
 
@@ -30,11 +40,14 @@ Supports titles, dates, start/end times, location, notes, and recurring events (
 
 2. Click **My add-ins** in the left sidebar
 
-3. Scroll to **Custom Add-ins** → **+ Add a custom add-in** → **Add from File...**
+3. Scroll to **Custom Add-ins** → **+ Add a custom add-in** → **Add from URL...**
 
-4. Upload the [`manifest.xml`](https://we1chj.github.io/AiCal/manifest.xml) from this repo
+4. Paste this URL:
+   ```
+   https://we1chj.github.io/AiCal/manifest.xml
+   ```
 
-5. Accept the warning and the add-in will appear in your Outlook ribbon
+5. Accept the warning — AiCal will appear in your Outlook ribbon
 
 ---
 
