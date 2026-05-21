@@ -10,16 +10,6 @@
 
 ---
 
-## Preview
-
-<p align="center">
-  <img src="assets/image.png" alt="AiCal button in the Outlook ribbon" width="340" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="assets/sidebar.png" alt="AiCal task pane" width="200" />
-</p>
-
----
-
 ## How it works
 
 1. Open any email in Outlook — the **AiCal** button appears in the ribbon
