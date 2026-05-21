@@ -14,7 +14,7 @@
 
 1. Open any email in Outlook — the **AiCal** button appears in the ribbon
 2. Click it to open the side panel
-3. Describe your event in plain English — *"Team standup every Monday at 9am for 30 minutes"*
+3. Type or paste in your event text — *"Team standup every Monday at 9am for 30 minutes"*
 4. GPT-4o parses the details and shows a pre-filled review form you can edit
 5. Click **Add to Calendar** to save the event
 
