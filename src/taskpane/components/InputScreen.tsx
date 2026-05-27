@@ -81,6 +81,13 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
           {keyStatus && <div className="api-status">{keyStatus}</div>}
         </div>
       </details>
+
+      {/* Footer */}
+      <div className="compose-footer">
+        <span>Made by <a className="compose-footer-link" href="https://github.com/We1chJ" target="_blank" rel="noreferrer">@We1chJ</a></span>
+        <span className="compose-footer-sep">·</span>
+        <a className="compose-footer-link" href="https://github.com/We1chJ/AiCal" target="_blank" rel="noreferrer">⭐ Leave a star</a>
+      </div>
     </div>
   );
 };

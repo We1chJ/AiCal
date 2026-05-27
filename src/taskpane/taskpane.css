@@ -200,6 +200,31 @@ body {
   font-weight: 500;
 }
 
+.compose-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+
+.compose-footer-sep {
+  opacity: 0.5;
+}
+
+.compose-footer-link {
+  color: var(--ink-mute);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.compose-footer-link:hover {
+  color: var(--accent);
+}
+
 /* ── Parsing Screen ── */
 .parsing-screen {
   display: flex;
