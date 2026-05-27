@@ -4,24 +4,31 @@ import GlassButton from './GlassButton';
 
 interface Props {
   event: EventData;
-  onConfirm: (event: EventData) => void;
+  onConfirm: (event: EventData) => Promise<void>;
   onBack: () => void;
 }
 
 const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
   const [data, setData] = useState<EventData>(event);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const update = (key: keyof EventData) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setData(prev => ({ ...prev, [key]: e.target.value }));
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!data.title) return setError('Title is required.');
     if (!data.date) return setError('Date is required.');
     if (!data.startTime) return setError('Start time is required.');
     setError('');
-    onConfirm(data);
+    setIsLoading(true);
+    try {
+      await onConfirm(data);
+    } catch (e) {
+      setIsLoading(false);
+      setError((e as Error).message || 'Failed to open appointment form. Please try again.');
+    }
   };
 
   return (
@@ -108,7 +115,9 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
       {/* Sticky footer */}
       <div className="review-footer">
         {error && <div className="review-error">{error}</div>}
-        <GlassButton fullWidth onClick={handleConfirm}>Add to Calendar</GlassButton>
+        <GlassButton fullWidth onClick={handleConfirm} disabled={isLoading}>
+          {isLoading ? 'Opening Outlook...' : 'Add to Calendar'}
+        </GlassButton>
       </div>
     </div>
   );

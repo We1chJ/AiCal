@@ -83,13 +83,13 @@ const App: React.FC = () => {
     }
   };
 
-  const handleSchedule = (event: EventData) => {
+  const handleSchedule = async (event: EventData) => {
     const start = new Date(`${event.date}T${event.startTime}`);
     const end = event.endTime
       ? new Date(`${event.date}T${event.endTime}`)
       : new Date(start.getTime() + 60 * 60 * 1000);
 
-    Office.context.mailbox.displayNewAppointmentForm({
+    await Office.context.mailbox.displayNewAppointmentForm({
       subject: event.title,
       start,
       end,
