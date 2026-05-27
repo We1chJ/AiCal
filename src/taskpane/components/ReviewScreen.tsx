@@ -12,10 +12,20 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
   const [data, setData] = useState<EventData>(event);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [dateExpanded, setDateExpanded] = useState(false);
 
   const update = (key: keyof EventData) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
       setData(prev => ({ ...prev, [key]: e.target.value }));
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value;
+    setData(prev => ({
+      ...prev,
+      date: newDate,
+      endDate: prev.endDate === prev.date ? newDate : prev.endDate,
+    }));
+  };
 
   const handleConfirm = async () => {
     if (!data.title) return setError('Title is required.');
@@ -59,8 +69,22 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
         <div className="review-card">
           <div className="review-grid">
             <div className="review-field">
-              <label className="review-label">Date</label>
-              <input className="review-input" type="date" value={data.date} onChange={update('date')} />
+              <div className="review-label-row">
+                <label className="review-label">{dateExpanded ? 'Start Date' : 'Date'}</label>
+                <button
+                  className="review-expand-btn"
+                  onClick={() => setDateExpanded(v => !v)}
+                  title={dateExpanded ? 'Collapse dates' : 'Set separate end date'}
+                >
+                  <svg
+                    width="12" height="12" viewBox="0 0 12 12" fill="none"
+                    style={{ transform: dateExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                  >
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
+              <input className="review-input" type="date" value={data.date} onChange={handleStartDateChange} />
             </div>
             <div className="review-field">
               <label className="review-label">Recurrence</label>
@@ -73,6 +97,12 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
               </select>
             </div>
           </div>
+          {dateExpanded && (
+            <div className="review-field" style={{ borderBottom: 'none' }}>
+              <label className="review-label">End Date</label>
+              <input className="review-input" type="date" value={data.endDate} onChange={update('endDate')} />
+            </div>
+          )}
         </div>
 
         {/* Start + End Time */}

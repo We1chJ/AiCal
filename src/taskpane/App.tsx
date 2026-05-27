@@ -10,6 +10,7 @@ type Screen = 'input' | 'loading' | 'review' | 'success';
 export interface EventData {
   title: string;
   date: string;
+  endDate: string;
   startTime: string;
   endTime: string;
   location: string;
@@ -75,7 +76,8 @@ const App: React.FC = () => {
       }
 
       const data = await res.json();
-      setParsedEvent(JSON.parse(data.choices[0].message.content));
+      const parsed = JSON.parse(data.choices[0].message.content);
+      setParsedEvent({ ...parsed, endDate: parsed.date });
       setScreen('review');
     } catch (e) {
       setError((e as Error).message);
@@ -86,8 +88,13 @@ const App: React.FC = () => {
   const handleSchedule = async (event: EventData) => {
     const start = new Date(`${event.date}T${event.startTime}`);
     const end = event.endTime
-      ? new Date(`${event.date}T${event.endTime}`)
+      ? new Date(`${event.endDate}T${event.endTime}`)
       : new Date(start.getTime() + 60 * 60 * 1000);
+
+    // Auto-advance end by one day if it lands before start (midnight-crossing events)
+    if (end <= start) {
+      end.setDate(end.getDate() + 1);
+    }
 
     await Office.context.mailbox.displayNewAppointmentForm({
       subject: event.title,
