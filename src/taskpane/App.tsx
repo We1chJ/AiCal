@@ -39,8 +39,6 @@ const App: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${apiKey}`,
-          'HTTP-Referer': 'https://we1chj.github.io/AiCal/',
-          'X-Title': 'AiCal',
         },
         body: JSON.stringify({
           model: 'deepseek/deepseek-v4-flash:free',
