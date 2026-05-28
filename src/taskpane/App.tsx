@@ -51,7 +51,12 @@ const App: React.FC = () => {
       const today = new Date().toLocaleDateString('en-CA');
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       // Strip any non-printable-ASCII chars that browsers reject in HTTP headers
-      const safeKey = apiKey.replace(/[^\x20-\x7E]/g, '');
+      const safeKey = apiKey.replace(/[^\x20-\x7E]/g, '').trim();
+      if (!safeKey) {
+        setScreen('input');
+        setError('API key appears invalid. Please re-enter and save your OpenRouter key.');
+        return;
+      }
       let rateLimited = false;
 
       for (const model of FREE_MODELS) {

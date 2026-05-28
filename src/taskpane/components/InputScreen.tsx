@@ -14,7 +14,11 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
 
   useEffect(() => {
     const saved = localStorage.getItem('openrouter_api_key');
-    if (saved) { setApiKey(saved); setKeyStatus('API key loaded'); }
+    if (saved) {
+      const clean = saved.replace(/[^\x20-\x7E]/g, '').trim();
+      setApiKey(clean);
+      setKeyStatus(clean ? 'API key loaded' : 'Saved key was invalid — please re-enter');
+    }
   }, []);
 
   const saveKey = () => {
