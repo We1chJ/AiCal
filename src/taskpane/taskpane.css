@@ -282,6 +282,22 @@ body {
 .parsing-step--active { color: var(--ink); }
 .parsing-step--done { color: var(--green); }
 
+.parsing-model-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.parsing-model-name {
+  font-size: 10px;
+  color: var(--ink-mute);
+  opacity: 0.7;
+}
+.parsing-model-status {
+  font-size: 10px;
+  color: var(--accent);
+}
+
 .step-icon {
   width: 18px;
   height: 18px;

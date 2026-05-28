@@ -7,7 +7,14 @@ const STEPS = [
   'Verifying output',
 ];
 
-const LoadingScreen: React.FC = () => {
+const shortName = (model: string) => model.split('/')[1]?.replace(':free', '') ?? model;
+
+interface Props {
+  model: string;
+  status: string;
+}
+
+const LoadingScreen: React.FC<Props> = ({ model, status }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
@@ -42,6 +49,13 @@ const LoadingScreen: React.FC = () => {
           );
         })}
       </div>
+
+      {model && (
+        <div className="parsing-model-info">
+          {status && <span className="parsing-model-status">{status}</span>}
+          <span className="parsing-model-name">Using {shortName(model)}</span>
+        </div>
+      )}
     </div>
   );
 };
