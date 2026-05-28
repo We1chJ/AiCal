@@ -41,7 +41,7 @@ const App: React.FC = () => {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'deepseek/deepseek-v4-flash:free',
+          model: 'moonshotai/kimi-k2.6:free',
           messages: [
             {
               role: 'system',
