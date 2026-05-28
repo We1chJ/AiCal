@@ -18,8 +18,9 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
   }, []);
 
   const saveKey = () => {
-    if (!apiKey.trim()) return;
-    localStorage.setItem('openrouter_api_key', apiKey.trim());
+    const clean = apiKey.replace(/[^\x20-\x7E]/g, '').trim();
+    if (!clean) return;
+    localStorage.setItem('openrouter_api_key', clean);
     setKeyStatus('Saved!');
     setTimeout(() => setKeyStatus(''), 2000);
   };

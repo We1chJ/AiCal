@@ -50,6 +50,8 @@ const App: React.FC = () => {
     try {
       const today = new Date().toLocaleDateString('en-CA');
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // Strip any non-printable-ASCII chars that browsers reject in HTTP headers
+      const safeKey = apiKey.replace(/[^\x20-\x7E]/g, '');
       let rateLimited = false;
 
       for (const model of FREE_MODELS) {
@@ -58,7 +60,7 @@ const App: React.FC = () => {
 
         const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${safeKey}` },
           body: JSON.stringify({
             model,
             messages: [
