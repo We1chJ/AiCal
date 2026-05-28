@@ -43,7 +43,7 @@ const App: React.FC = () => {
           'X-Title': 'AiCal',
         },
         body: JSON.stringify({
-          model: 'meta-llama/llama-3.1-8b-instruct:free',
+          model: 'deepseek/deepseek-v4-flash:free',
           messages: [
             {
               role: 'system',
