@@ -13,13 +13,13 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
   const [keyStatus, setKeyStatus] = useState('');
 
   useEffect(() => {
-    const saved = localStorage.getItem('openai_api_key');
+    const saved = localStorage.getItem('openrouter_api_key');
     if (saved) { setApiKey(saved); setKeyStatus('API key loaded'); }
   }, []);
 
   const saveKey = () => {
     if (!apiKey.trim()) return;
-    localStorage.setItem('openai_api_key', apiKey.trim());
+    localStorage.setItem('openrouter_api_key', apiKey.trim());
     setKeyStatus('Saved!');
     setTimeout(() => setKeyStatus(''), 2000);
   };
@@ -64,7 +64,7 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
             <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" />
             <path d="M7 6.5v3M7 4.5h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
-          OpenAI API Key
+          OpenRouter API Key
         </summary>
         <div className="api-accordion-body">
           <div className="api-input-row">
@@ -73,7 +73,7 @@ const InputScreen: React.FC<Props> = ({ onParse, error }) => {
               className="api-input"
               value={apiKey}
               onChange={e => setApiKey(e.target.value)}
-              placeholder="sk-..."
+              placeholder="sk-or-..."
               onKeyDown={e => e.key === 'Enter' && saveKey()}
             />
             <GlassButton variant="secondary" onClick={saveKey}>Save</GlassButton>

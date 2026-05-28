@@ -26,7 +26,7 @@ const App: React.FC = () => {
   const handleParse = async (text: string, apiKey: string) => {
     setError('');
     if (!text) return setError('Please describe your event.');
-    if (!apiKey) return setError('Please enter and save your OpenAI API key.');
+    if (!apiKey) return setError('Please enter and save your OpenRouter API key.');
 
     setScreen('loading');
 
@@ -34,39 +34,24 @@ const App: React.FC = () => {
       const today = new Date().toLocaleDateString('en-CA');
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+          'HTTP-Referer': 'https://we1chj.github.io/AiCal/',
+          'X-Title': 'AiCal',
+        },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'meta-llama/llama-3.1-8b-instruct:free',
           messages: [
             {
               role: 'system',
-              content: `You are a calendar assistant. Extract event details from the user's message. Today is ${today}. The user's local timezone is ${timezone}. All output times should be in the user's local timezone. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date.`,
+              content: `You are a calendar assistant. Extract event details from the user's message and return a JSON object with exactly these fields: title (string), date (YYYY-MM-DD string), startTime (HH:MM 24h string), endTime (HH:MM 24h string), location (string, empty if none), recurrence (one of: none/daily/weekly/monthly/yearly), notes (string, empty if none). Today is ${today}. The user's local timezone is ${timezone}. All times should be in the user's local timezone. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date. Return only the JSON object, no other text.`,
             },
             { role: 'user', content: text },
           ],
-          response_format: {
-            type: 'json_schema',
-            json_schema: {
-              name: 'calendar_event',
-              strict: true,
-              schema: {
-                type: 'object',
-                properties: {
-                  title:      { type: 'string', description: 'Event title' },
-                  date:       { type: 'string', description: 'Date in YYYY-MM-DD' },
-                  startTime:  { type: 'string', description: 'Start time in HH:MM 24h' },
-                  endTime:    { type: 'string', description: 'End time in HH:MM 24h' },
-                  location:   { type: 'string', description: 'Room, address, or meeting URL. Empty string if none.' },
-                  recurrence: { type: 'string', enum: ['none', 'daily', 'weekly', 'monthly', 'yearly'] },
-                  notes:      { type: 'string', description: 'Any extra context. Empty string if none.' },
-                },
-                required: ['title', 'date', 'startTime', 'endTime', 'location', 'recurrence', 'notes'],
-                additionalProperties: false,
-              },
-            },
-          },
+          response_format: { type: 'json_object' },
         }),
       });
 
