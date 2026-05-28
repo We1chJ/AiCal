@@ -8,12 +8,17 @@ import ClickSpark from './components/ClickSpark';
 type Screen = 'input' | 'loading' | 'review' | 'success';
 
 const FREE_MODELS = [
+  'openai/gpt-oss-120b:free',
+  'openai/gpt-oss-20b:free',
+  'z-ai/glm-4.5-air:free',
   'moonshotai/kimi-k2.6:free',
   'deepseek/deepseek-v4-flash:free',
   'google/gemma-4-31b-it:free',
   'nousresearch/hermes-3-llama-3.1-405b:free',
   'poolside/laguna-xs.2:free',
   'cognitivecomputations/dolphin-mistral-24b-venice-edition:free',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+  'minimax/minimax-m2.5:free',
 ];
 
 export interface EventData {
@@ -25,6 +30,7 @@ export interface EventData {
   location: string;
   recurrence: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
   notes: string;
+  isAllDay: boolean;
 }
 
 const App: React.FC = () => {
@@ -75,7 +81,7 @@ const App: React.FC = () => {
 
         const data = await res.json();
         const parsed = JSON.parse(data.choices[0].message.content);
-        setParsedEvent({ ...parsed, endDate: parsed.date });
+        setParsedEvent({ ...parsed, endDate: parsed.date, isAllDay: false });
         setScreen('review');
         return;
       }
@@ -88,14 +94,22 @@ const App: React.FC = () => {
   };
 
   const handleSchedule = async (event: EventData) => {
-    const start = new Date(`${event.date}T${event.startTime}`);
-    const end = event.endTime
-      ? new Date(`${event.endDate}T${event.endTime}`)
-      : new Date(start.getTime() + 60 * 60 * 1000);
+    let start: Date;
+    let end: Date;
 
-    // Auto-advance end by one day if it lands before start (midnight-crossing events)
-    if (end <= start) {
-      end.setDate(end.getDate() + 1);
+    if (event.isAllDay) {
+      start = new Date(`${event.date}T00:00:00`);
+      end = new Date(`${event.endDate}T23:59:59`);
+    } else {
+      start = new Date(`${event.date}T${event.startTime}`);
+      end = event.endTime
+        ? new Date(`${event.endDate}T${event.endTime}`)
+        : new Date(start.getTime() + 60 * 60 * 1000);
+
+      // Auto-advance end by one day if it lands before start (midnight-crossing events)
+      if (end <= start) {
+        end.setDate(end.getDate() + 1);
+      }
     }
 
     await Office.context.mailbox.displayNewAppointmentForm({
@@ -106,6 +120,7 @@ const App: React.FC = () => {
       body: event.notes,
       requiredAttendees: [],
       optionalAttendees: [],
+      isAllDayEvent: event.isAllDay,
     });
 
     setScreen('success');

@@ -30,7 +30,7 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
   const handleConfirm = async () => {
     if (!data.title) return setError('Title is required.');
     if (!data.date) return setError('Date is required.');
-    if (!data.startTime) return setError('Start time is required.');
+    if (!data.isAllDay && !data.startTime) return setError('Start time is required.');
     setError('');
     setIsLoading(true);
     try {
@@ -105,19 +105,36 @@ const ReviewScreen: React.FC<Props> = ({ event, onConfirm, onBack }) => {
           )}
         </div>
 
-        {/* Start + End Time */}
+        {/* All Day Toggle */}
         <div className="review-card">
-          <div className="review-grid">
-            <div className="review-field">
-              <label className="review-label">Start</label>
-              <input className="review-input" type="time" value={data.startTime} onChange={update('startTime')} />
-            </div>
-            <div className="review-field">
-              <label className="review-label">End</label>
-              <input className="review-input" type="time" value={data.endTime} onChange={update('endTime')} />
-            </div>
+          <div className="review-field" style={{ borderBottom: 'none' }}>
+            <label className="review-checkbox-label">
+              <input
+                type="checkbox"
+                checked={data.isAllDay}
+                onChange={(e) => setData(prev => ({ ...prev, isAllDay: e.target.checked }))}
+                className="review-checkbox"
+              />
+              <span>All day event</span>
+            </label>
           </div>
         </div>
+
+        {/* Start + End Time */}
+        {!data.isAllDay && (
+          <div className="review-card">
+            <div className="review-grid">
+              <div className="review-field">
+                <label className="review-label">Start</label>
+                <input className="review-input" type="time" value={data.startTime} onChange={update('startTime')} />
+              </div>
+              <div className="review-field">
+                <label className="review-label">End</label>
+                <input className="review-input" type="time" value={data.endTime} onChange={update('endTime')} />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Location */}
         <div className="review-card">

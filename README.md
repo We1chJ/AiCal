@@ -63,12 +63,17 @@ AiCal automatically rotates through a list of free OpenRouter models. If one hit
 
 | Model | Provider |
 |---|---|
+| `openai/gpt-oss-120b:free` | OpenAI |
+| `openai/gpt-oss-20b:free` | OpenAI |
+| `z-ai/glm-4.5-air:free` | Z-AI |
 | `moonshotai/kimi-k2.6:free` | Moonshot AI |
 | `deepseek/deepseek-v4-flash:free` | DeepSeek |
 | `google/gemma-4-31b-it:free` | Google |
 | `nousresearch/hermes-3-llama-3.1-405b:free` | Nous Research |
 | `poolside/laguna-xs.2:free` | Poolside |
 | `cognitivecomputations/dolphin-mistral-24b-venice-edition:free` | Cognitive Computations |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | NVIDIA |
+| `minimax/minimax-m2.5:free` | Minimax |
 
 ### Rate limits
 
