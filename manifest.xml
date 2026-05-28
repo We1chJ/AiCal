@@ -5,15 +5,15 @@
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
   <Id>05c2e1c9-3e1d-406e-9a91-e9ac64854143</Id>
   <Version>1.0.0.0</Version>
-  <ProviderName>Contoso</ProviderName>
+  <ProviderName>We1chJ</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="AiCal"/>
-  <Description DefaultValue="A template to get started."/>
+  <Description DefaultValue="Turn plain-text descriptions into Outlook calendar events using free AI models."/>
   <IconUrl DefaultValue="https://we1chj.github.io/AiCal/assets/aicon-aurora-128.png"/>
   <HighResolutionIconUrl DefaultValue="https://we1chj.github.io/AiCal/assets/aicon-aurora-512.png"/>
-  <SupportUrl DefaultValue="https://www.contoso.com/help"/>
+  <SupportUrl DefaultValue="https://github.com/We1chJ/AiCal"/>
   <AppDomains>
-    <AppDomain>https://www.contoso.com</AppDomain>
+    <AppDomain>https://we1chj.github.io</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox" />
@@ -149,10 +149,10 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="AiCal"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Show Task Pane"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="AiCal"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Opens a pane displaying all available properties."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Parse plain text into a calendar event using AI."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
