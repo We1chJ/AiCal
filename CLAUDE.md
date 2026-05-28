@@ -166,3 +166,9 @@ When deploying:
 1. Update version in `manifest.xml` if needed.
 2. Run `npm run deploy` (builds + pushes to `gh-pages` branch).
 3. Changes go live immediately (no cache busting—consider manifest version bump if users see stale assets).
+
+## Deployment Rule
+
+After any major change, always push to both branches:
+1. Commit and `git push origin main`
+2. `npm run deploy` (builds + pushes to `gh-pages`)

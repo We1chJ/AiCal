@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" width="80" alt="AiCal logo" />
+  <img src="assets/aicon-aurora-256.png" width="80" alt="AiCal logo" />
 </p>
 
 <h1 align="center">AiCal</h1>
