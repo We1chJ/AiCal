@@ -71,8 +71,9 @@ const App: React.FC = () => {
       }
       let lastError = 'No model returned a usable response. Try again in a moment.';
       let switchReason = '';
+      const shuffled = [...FREE_MODELS].sort(() => Math.random() - 0.5);
 
-      for (const model of FREE_MODELS) {
+      for (const model of shuffled) {
         setLoadingModel(model);
         setLoadingStatus(switchReason);
 
