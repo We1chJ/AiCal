@@ -21,6 +21,18 @@ const FREE_MODELS = [
   'minimax/minimax-m2.5:free',
 ];
 
+// Free models often wrap JSON in markdown fences or add stray prose.
+// Strip fences and slice to the outermost object before parsing.
+const extractEventJson = (content: string): EventData => {
+  let s = content.trim();
+  const fence = s.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) s = fence[1].trim();
+  const first = s.indexOf('{');
+  const last = s.lastIndexOf('}');
+  if (first !== -1 && last > first) s = s.slice(first, last + 1);
+  return JSON.parse(s);
+};
+
 export interface EventData {
   title: string;
   date: string;
@@ -57,43 +69,57 @@ const App: React.FC = () => {
         setError('API key appears invalid. Please re-enter and save your OpenRouter key.');
         return;
       }
-      let rateLimited = false;
+      let lastError = 'No model returned a usable response. Try again in a moment.';
+      let switchReason = '';
 
       for (const model of FREE_MODELS) {
         setLoadingModel(model);
-        setLoadingStatus(rateLimited ? 'Rate limited — switching model' : '');
+        setLoadingStatus(switchReason);
 
-        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${safeKey}` },
-          body: JSON.stringify({
-            model,
-            messages: [
-              {
-                role: 'system',
-                content: `You are a calendar assistant. Extract event details from the user's message and return a JSON object with exactly these fields: title (string), date (YYYY-MM-DD string), startTime (HH:MM 24h string), endTime (HH:MM 24h string), location (string, empty if none), recurrence (one of: none/daily/weekly/monthly/yearly), notes (string, empty if none). Today is ${today}. The user's local timezone is ${timezone}. All times should be in the user's local timezone. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date. Return only the JSON object, no other text.`,
-              },
-              { role: 'user', content: text },
-            ],
-            response_format: { type: 'json_object' },
-          }),
-        });
+        try {
+          const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${safeKey}` },
+            body: JSON.stringify({
+              model,
+              messages: [
+                {
+                  role: 'system',
+                  content: `You are a calendar assistant. Extract event details from the user's message and return a JSON object with exactly these fields: title (string), date (YYYY-MM-DD string), startTime (HH:MM 24h string), endTime (HH:MM 24h string), location (string, empty if none), recurrence (one of: none/daily/weekly/monthly/yearly), notes (string, empty if none). Today is ${today}. The user's local timezone is ${timezone}. All times should be in the user's local timezone. If no end time is mentioned, add 1 hour to start. If no date is mentioned, use today. For recurring events, pick the next occurrence date. Return only the JSON object, no other text.`,
+                },
+                { role: 'user', content: text },
+              ],
+              response_format: { type: 'json_object' },
+            }),
+          });
 
-        if (res.status === 429) { rateLimited = true; continue; }
+          if (res.status === 429) {
+            switchReason = 'Rate limited — switching model';
+            lastError = 'All models are rate limited. Try again in a moment.';
+            continue;
+          }
 
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error?.message || `API error ${res.status}`);
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            lastError = err.error?.message || `API error ${res.status}`;
+            switchReason = 'Model error — switching model';
+            continue;
+          }
+
+          const data = await res.json();
+          const parsed = extractEventJson(data.choices?.[0]?.message?.content ?? '');
+          setParsedEvent({ ...parsed, endDate: parsed.date, isAllDay: false });
+          setScreen('review');
+          return;
+        } catch (e) {
+          // Bad/malformed JSON or unexpected shape — fall through to the next model
+          lastError = (e as Error).message;
+          switchReason = 'Invalid response — switching model';
+          continue;
         }
-
-        const data = await res.json();
-        const parsed = JSON.parse(data.choices[0].message.content);
-        setParsedEvent({ ...parsed, endDate: parsed.date, isAllDay: false });
-        setScreen('review');
-        return;
       }
 
-      throw new Error('All models rate limited. Try again in a moment.');
+      throw new Error(lastError);
     } catch (e) {
       setError((e as Error).message);
       setScreen('input');
